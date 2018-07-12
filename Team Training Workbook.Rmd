@@ -1,0 +1,111 @@
+---
+title: "Team Training"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an interactive R notebook which contains all the training materials. When you execute code within the notebook, the results appear beneath the code. 
+
+This workbook is broken down into 6 sections.
+
+0. Introduction to R and Rstudio
+1. Data Types, Operators and Basic Operations
+2. Data Structures, Manipulations and all things data
+3. Conditional Statements and Loops
+4. Functions and Packages
+5. Plotting, SQL connection and Heathrow Analytics use case
+6. Modelling
+
+## 0. Introduction to R and RStudio
+
+R is an interpreted implementation of the statistical programming language S, and has been around since 2000. R comes with it's own default GUI but the overwhelming most popular front-end for R is RStudio which is developed by the R foundation. RStudio offers lots of additional ease of use tools such as autocompletion, plotting interface, package installers and a git interface as well as just generally being clean and lovely to use.
+
+There are a few places in RStudio worth mentioning:
+
+**Console**: This is where you write your code. It will most likely be in the bottom left quadrant but you may put it wherever is most comfortable. To execute code all you have to do is type into the console and press Enter. If saved to a variable then it will appear in the top right under "Enviroment" and can be called from the console.
+
+**Enviroment**: This is where your variables, functions and datasets are stored and viewed. The enviroment window will give you information on the size, type and name of your objects. It also contains the import dataset for when you're too lazy to import files programmatically (or you can't rememeber the correct package for .xlsx files)
+
+**Plots**: This is where yourplotting outputs will be displayed. There is also the ability to zoom in and explore your visualisation (interactively, depending on the package) and then allows you to export the data to a desired location.
+
+**Packages**: These are the currently installed packages on your computer that R can see. RStudio comes with a number of popular packages already pre-installed thatjust need to be imported before using. Your best friend will be the 'Install' button where you can explore CRAN (Comprehensive R Archive Network) for any pre-built, ready to go code published freely.
+
+**Help**: Your new best friend. The CRAN network is one of R's greatest achievements and is an encyclopedic level of documentation, explanation and examples. You can either search through Help itself, or you can type '?' before the name of a function or package you want to know about and it will be displayed int he help window.
+
+A few other tips and tricks:
+
+- Use `setwd()` and `getwd()` to set and get your current working directory.
+- You can run code line-by-line in the script sections, or run just highlighted code by using ctrl + enter
+- Comments for code are done by placing a '#' at any point on a line. R does not have multiline comments.
+
+
+## 1. Data Types, Operators and Basic Operations
+
+# Data types
+What other languages called data 'types', R calls data classes. R has lots of classes, but the main ones are:
+
+- Integers, such as 1, 87 and -9
+- Numerics, such as 1, 87.8 and -9.0
+- Characters, such as 'a', "hello"" and '1'. Characters in R can be defined with both single and double quotes
+- Logical: TRUE, FALSE and the aliases T and F
+
+
+We can define an integer by adding L to our value. We wan then check its type using the `class()` function - try changing the value of and test to see what class returns.
+
+```{r}
+x = 1L #also try 1, '1' and T
+class(x)
+```
+
+R has 2 main types of functions to detect and maipulate these classes which are `is.`, which checks the variable and returns a boolean value, and the `as.` functions which set the class of a value.
+
+```{r}
+x = 1L 
+is.character(x) #checks to see if it is a string
+x=as.character(x) #alters the class 
+class(x) # returns the new class of x
+print(x) # return the new x
+```
+
+
+# Operators 
+
+R also comes with a whole host of operators.
+
+**Artihmetic Operators:**
+
+Operator | Name
+--------- | --------
++ | addition
+ - | subtration
+ * | multiplication
+ / | division
+ ^ or ** | exponent
+ %% | modulus
+ %/% | integer division 
+
+**Logical Operators:**
+
+Operator | Name
+--------- | --------
+< | less than
+<= | less than or equal
+ > | greater Than
+ >= | greater than or equal
+ == | exactly equal to
+ != | not equal to
+ !  | not
+ \|  | OR
+ &  | AND
+
+
+
+
+
+```{r}
+plot(iris$Sepal.Length)
+```
+
+
+
