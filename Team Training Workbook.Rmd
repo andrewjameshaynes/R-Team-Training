@@ -85,6 +85,19 @@ Operator | Name
  %% | modulus
  %/% | integer division 
 
+Feel free to play around with these operators in the console, but here are some examples of each:
+
+```{r}
+2+3
+2-3
+2*3
+2/3
+2^3
+2%%3
+2%/%3
+```
+ 
+
 **Logical Operators:**
 
 Operator | Name
@@ -98,9 +111,32 @@ Operator | Name
  !  | not
  \|  | OR
  &  | AND
+ 
+Feel free to play around with these operators in the console, but here are some examples of each:
+
+```{r}
+2<3 #TRUE
+
+2==3 #FALSE
+1=='1' #TRUE
+
+T & F # FALSE
+
+(T & T) & (T | F) # TRUE
 
 
+```
 
+
+# Coersion
+
+As you saw in the last example, `1` and `'1'` were evaluated to be equal. You will also see the same results if you try `T==1`. This is because R is a dynamically typed language and at runtime will try to coerce everything nice together in the following rough logic:
+
+> logical < integer < numeric < character
+
+Basically logical is the strictest data class only allowing `TRUE` and `FALSE` whereas character is an extremely flexible class and allows other types to be converted to character at runtime if there is a combination of values. This is particularly useful when we look at string manipulation.
+
+# String Operations
 
 
 ```{r}
