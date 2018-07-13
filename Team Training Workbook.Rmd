@@ -38,6 +38,7 @@ A few other tips and tricks:
 - Use `setwd()` and `getwd()` to set and get your current working directory.
 - You can run code line-by-line in the script sections, or run just highlighted code by using ctrl + enter
 - Comments for code are done by placing a '#' at any point on a line. R does not have multiline comments.
+- R has two assignment operators '=' and the more traditional '<-' for this training I will use an equals sign as it should be more familiar.
 
 
 ## 1. Data Types, Operators and Basic Operations
@@ -138,9 +139,68 @@ Basically logical is the strictest data class only allowing `TRUE` and `FALSE` w
 
 # String Operations
 
+R is a statistical programming language. It has beautifully optimised methods for dealings with data, numbers and modelling. Most base R functions are optimised in C or C++ and for small data volumes are not only fast, but also accurate and easy to use. It'll be a shock to you to learn that strings and manipulations of them in R are an **absolute nightmare**.
+
+Let's start with some basics. To define a string in R you can use either double or quotes with no difference between the two.
 
 ```{r}
-plot(iris$Sepal.Length)
+string = 'Hello World!'
+print(string)
+
+```
+
+We can then find properties about our new string with functions such as `length()` which returns the number of strings and `nchar()` which returns the number of characters that make up the string. 
+
+```{r}
+string = 'Hello World!'
+length(string)
+nchar(string)
+
+```
+
+There are then a few basic functions (with strange names) that we can use to manipulate strings:
+
+- `paste` which is the conatenation function for R, is used to concat and collapse strings together (also see `?paste0`)
+- `strsplit` which allows you to split strings based on a delimeter
+- `substr` which find substrings, (also see `?substring()`)
+- `gsub` which is a global replace of a character, substring or regex within the string
+- `tolower/toupper` which are builtins to capitalise and lowercase a string
+
+
+Let's start by focusing on paste:
+
+```{r}
+string1 = "Hello"
+string2 = "World!"
+paste(string1, string2, sep = ' ') ## simple concat
+
+paste(string1, string2, 'is a terrible catchphrase', sep = ',')
+
+## also allows non string values, and cross concatenation
+paste('string',1:2)
+
+## can also be used to collapse a bunch of letters
+split_string = c('H','e','l','l','o')
+print(split_string)
+
+paste('What is the output of collapsing split_string? ->', paste(split_string, collapse = ''))
+
+```
+
+
+We can then look at the opposite of paste, which is substring:
+
+```{r}
+## split string for it to make sense
+string_to_split = 'Hello &World! &How &are& you& doing?'
+strsplit(string_to_split, split = '&')
+
+```
+
+
+
+```{r}
+string
 ```
 
 
