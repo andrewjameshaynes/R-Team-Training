@@ -200,8 +200,78 @@ strsplit(string_to_split, split = '&')
 
 
 ```{r}
-string
+#string
 ```
 
+
+## 2. Data Structures and manipulation
+
+R has N many types of data structure:
+
+- Vector
+- Data frame
+- Matrix
+- List
+- Array
+
+For this training we will focuso the first 4 of these. But it is worth bearing in mind that in R, everything that is an object is fundamentally a list (despite how cleverly hidden)
+
+# Vectors 
+
+Vectors in R are the basic default type for one dimensional data. They are similar to lists in python, arrays in some laguages, and more accurately described as columns in others.
+
+To define a vector we use the `c()` function. `c` stands for concatenate/coerce depending on who you ask. We can then reference individal elements inside a vector with single square brackets - remeber R is 1-indexed!
+
+
+```{r}
+## as a vector of strings
+greetings = c("Hello", "Hey", "ahoy")
+print(greetings)
+
+## as numeric
+numbers = c(1, 5.5, 29)
+print(numbers)
+
+## print first element of numbers
+print(numbers[1])
+
+## what happens if we combine both?
+mixture = c("hello world", 1 , T, "woof")
+print(mixture)
+```
+
+As we can see from above it is easy to create a vector of bespoke values. What is interesting to note is that vectors also satisfy the coercion laws that we saw earlier and will coerce information into the lowest level of coercion.
+
+At this point it is worth nothing there is a reason that vectors are called vectors and not lists, or even scalars. Objects in R are naturally vectorised. That means that if you apply *simple* functions to a vector R then the operation is applied to all the elements of that vector individually.
+
+For instance, if we multiplty a vector of numbers by 2:
+
+```{r}
+## show benefits of vectorisation
+numbers = c(1,2,4,6,9,20)
+numbers_doubled = numbers * 2
+
+print(numbers)
+print(numbers_doubled)
+```
+
+Equally importantly is to think of operations as being performed elementwise, for example what happens if I multiply two vectors together?
+
+```{r}
+c(1,2,3) * c(1,2,3)
+```
+
+# Data Frames
+
+Data frames, also nown as Dataframes or Data.Frames, are the workhorse of the R data analyses. They can be considered synonymous with tables in other languages, but with easy indexing and nice layout.
+
+To define a data frame we use the `data.frame()` function. This function requires a number of vectors >1 to be read in with (or without vector names). For example, let's define a data frame with the names of people and their 'australian score':
+
+```{r}
+aussie_scores = data.frame( Names = c('Andrew', 'Claire', 'Chris', 'Allen'),
+                            Aussie_score = c(1,1,10,1))
+
+print(aussie_scores)
+```
 
 
