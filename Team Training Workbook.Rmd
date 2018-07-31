@@ -329,3 +329,70 @@ rbind(iris_top, iris_bottom) ## set data on top of each other
 ```
 
 
+# 3. Conditional Statements and loops
+
+## Conditional Statements
+
+R has multiple ways of running if-else statements, they are primarily `if()`, `ifelse()` and `switch()`. Switch statements are rarely used in R, and the preferred method is to use nested if-else or ifelse statements. The syntax for if statements is as below:
+
+```{r}
+## if-else statement
+if(condition1){
+  
+} else if(condition2){
+  
+} else {
+  
+}
+
+## ifelse statement
+
+ifelse(condition, value_if_true, value_if_false)
+
+```
+
+if-else and ifelse() statements have two different purposes. if-else statements are used for **control flow**, similar to other languages. ifelse() statements are more often used to select and create elements of a data object.
+
+For example, we could use either method to print a single value based on a condition, or assign a new value to a variable:
+
+```{r}
+## print values
+if(1 > 0){
+  print('success!')
+} else {
+  print('not a success!')
+}
+
+ifelse(1 > 0, 'success!', 'not a success!')
+
+## assign values to a variable
+
+
+if(TRUE != FALSE){
+  a = 17
+}
+print(a)
+
+b = ifelse(TRUE > FALSE, 12, 0)
+print(b)
+```
+
+The advantage of `ifelse()` other than its smaller syntax is that it is naturally vectorised, and makes it extremely useful for editing and selecting values from a vector (and by extension dataframes and lists).
+
+```{r}
+## replace all occurences of staff 0/1 flag with nice labels
+
+# create dataframe
+df = data.frame(Staff = c(0,1,0,1), Class = c('A', 'A', 'B', 'B'), Spend = c(1,4,2,8))
+print(df)
+
+##create new vector of values
+ifelse(df$Staff == 1, 'Staff', 'Passenger')
+
+## apply to dataframe
+df$Staff = ifelse(df$Staff == 1, 'Staff', 'Passenger')
+print(df)
+```
+
+
+## Loops
