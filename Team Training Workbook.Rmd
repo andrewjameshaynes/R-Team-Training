@@ -3,6 +3,8 @@ title: "Team Training"
 output:
   html_document:
     df_print: paged
+editor_options: 
+  chunk_output_type: console
 ---
 
 This is an interactive R notebook which contains all the training materials. When you execute code within the notebook, the results appear beneath the code. 
@@ -263,7 +265,7 @@ c(1,2,3) * c(1,2,3)
 
 # Data Frames
 
-Data frames, also nown as Dataframes or Data.Frames, are the workhorse of the R data analyses. They can be considered synonymous with tables in other languages, but with easy indexing and nice layout.
+Data frames, also known as Dataframes but known in R as Data.Frames, are the workhorse of R data analyses. They can be considered synonymous with tables in other languages, but with easy indexing and nice layout.
 
 To define a data frame we use the `data.frame()` function. This function requires a number of vectors >1 to be read in with (or without vector names). For example, let's define a data frame with the names of people and their 'australian score':
 
@@ -272,6 +274,58 @@ aussie_scores = data.frame( Names = c('Andrew', 'Claire', 'Chris', 'Allen'),
                             Aussie_score = c(1,1,10,1))
 
 print(aussie_scores)
+```
+
+You can also pass matrices and other data.frames to `data.frame()`, and combinations of both with vectors to create a dataset.
+
+We can index data.frame's by using square brackets. Data.frames require at least 2 elements select data, `i` referring to the rows, and `j` referring to the columns, separated by a comma - [i,j]
+
+We can also access columns (only one, and not rows) by using the `$` operator. Such as `aussie_scores$Names`.
+
+```{r}
+aussie_scores[1,1] ## gives Andrew
+
+aussie_scores[1, ] ## gives entire first row
+
+aussie_scores[ ,1] ## gives first column (as vector)
+
+aussie_scores[ ,1, drop = F]
+
+aussie_scores[1:2, 1:2] ## gives first 2 columns and first 2 rows
+
+aussie_scores$Names ## gives the same as aussie_scores[,1]
+
+```
+
+Data.frames can be easily passed to a number of different functions just as you would a vector. Some regular ones are here:
+
+```{r}
+length(iris) ## length - for a dataframe this means the number of columns
+nrow(iris)  ## number of rows
+ncol(iris)  ## number of columns
+dim(iris)  ## the dimensions -  rows, columns
+summary(iris)  ## produces values for min, max, mean, median and quartiles if numeric, counts if not
+str(iris)  ## structure of the data - gives dimensions, column names, data type and preview of first 10 rows
+```
+
+
+Data.frames are really easy to use and manipulate and comes with all the usual functions such as `merge`, unions - done with `rbind` for data setting, and `cbind` for appending columns without a merge.
+
+```{r}
+aussie_scores = data.frame( Names = c('Andrew', 'Claire', 'Chris', 'Allen'),
+                            Aussie_score = c(1,1,10,1))
+                            
+drink_of_choice = data.frame( Names = c('Andrew', 'Claire', 'Chris'),
+                              Drinks = c('Mojito', 'Tequila Sunrise', 'Espresso Martini'))
+
+merge(aussie_scores, drink_of_choice, by = "Names") ## inner join
+merge(aussie_scores, drink_of_choice, by = "Names", all.x = TRUE) ## left join
+
+iris_top = head(iris, 6)
+iris_bottom = tail(iris, 6)
+
+cbind(iris_top, iris_bottom) ## append the two data sets next to each other
+rbind(iris_top, iris_bottom) ## set data on top of each other
 ```
 
 
