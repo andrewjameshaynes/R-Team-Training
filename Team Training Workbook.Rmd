@@ -396,3 +396,91 @@ print(df)
 
 
 ## Loops
+
+R has 2 basic loops, a `for()` loop and a `while()` loop. We'll concentrate mostly on for loops as they are used frequently within R. We will then look at R's  vectorised alternative which is a family of `apply()` statements.
+
+# for loops
+
+The basic syntax for for loops is as follows:
+
+```{r}
+for(i in list){
+  #do something
+}
+```
+
+There are a couple of common R snippets that are worth mentioning at this point, such as iterating over a range of values and creating a new vector with a loop.
+
+```{r}
+## print all the numbers from 1 to 10
+
+for(i in 1:10){
+  print(i)
+}
+
+
+## create a new empty vector with c() and fill it with a for loop
+a=c()
+b=c()
+for(i in 1:5){
+  a[i] = i ^ 2
+  b    = append(b, i^3)
+}
+print(a)
+print(paste0('The first 5 cubes are: ', paste0(b, collapse = ', ')))
+
+```
+
+
+# while loops 
+
+The syntax for a `while()` loop is a simplified syntax comparable to most other languages, it will finish when the condition is no longer valid or if the user specifies a break to the loop with a `break` statement.
+
+
+```{r}
+## print list of numbers
+i = 1
+
+while(i < 5){ ## condition is checked at the top
+  i = i+1
+  print(i)
+}
+
+## break statement example
+
+j=0
+while(j + 1 < 5){
+  j = j + 1
+  if(j == 2){
+    break
+  }
+}
+
+```
+
+# apply statements
+
+The family of `apply` functions in R are used to apply functions over elements of vectors and lists at a single time. There is an apply for multiple different situations, but all have some unusual behaviours and side effects. The advantage they have is that, because they're naturally vectorised, they are often quicker than using a for loop, and their syntax is shorter and less verbose. *Should be used with care/experience*
+
+- `apply`: Works on all data types
+- `lapply`: Works over lists and vectors
+- `sapply`: A nicer version of `lapply` but will try to return a vector or matrix depending on certain conditions.
+
+A few more to name are `mapply`, `vapply`, `rapply`, `tapply` etc.
+
+To use an `apply` function, you have to supply a dataset x, and a function FUN (plus other options depending on the function, including which index to use, 1 for cols and 2 for rows):
+
+```{r}
+## examples of using apply functions with iris
+
+sapply(iris, class) ## find the class of each column and return as a named vector
+
+apply(iris[49:52, 5, drop = FALSE], 2, toupper) ## take a subset or the iris dataset species column, and apply toupper                                                 ## function over rows
+
+sapply(1:10, function(x) x ^ 2) ## define a new function that squares all elements in the array
+
+```
+
+
+### 4. Functions and Packages
+
