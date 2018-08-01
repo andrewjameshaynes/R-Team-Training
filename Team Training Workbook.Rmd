@@ -627,9 +627,77 @@ boxplot(Sepal.Length ~ Species, data = iris, ylab = "Sepal Length", xlab = "Spec
 
 ```
 
+## ggplot2
+
+Base R graphics are designed to be simple, minimalistic but very flexible to use, if at the cost of ease of use. To help create more flexibility with an ease of use, reproducibility and increased style options Hadley Wickham created the `ggplot2` package.
+
+`ggplot2` has a sharp learning curve but it's potential is pretty limitless. I'm gonna talk through one big function and break down the individual parts instead of commenting on what each individual function does (I still sometimes need documentation and google for that):
+
+INSERT COOL VIZ HERE
+
+
+### 6. Statistics and Modelling
+
+Now, the reason R was created - statistics. You will find R has lots of pre-built, highly optimised functions to do with probability, sampling, statistical tests and modelling.
+
+## Random numbers and sampling
+
+R has many prebuilt ways to sample random numbers. For example you can easily sample from many common distributions such as the uniform (`runif()`), the Normal (`rnorm()`) and even weirder ones such as the Weibull `rweibull()`.
+
+```{r}
+## 10 random uniform numbers between 0 and 1
+runif(10)
+
+## 10 random numbers from the normal distribution with mean 5 and standard deviation 2
+rnorm(n = 10, mean = 5, sd = 2)
+
+## random normally distributed numbers visualised in a histogram
+
+hist(rnorm(1000))
+
+## 10 random integers between 0 and 100
+
+round(runif(10, 0, 100))
+
+```
+
+The next function we will introduce is the `sample()` function. This functions takes random samples from a vector of a certain size with or without replacement. 
+
+```{r}
+## 10 random integers between 0 and 100
+sample(1:100, size = 10)
+
+## Simple bootstrap algorithm on iris dataset
+iris[sample(1:nrow(iris), replace = T), ]
+
+```
+
+For reproducible results in R using PRNG's it is necessary to set a seed before hand so that results built on random numbers can be re-run. This is simply done with the `set.seed(18)` function with any integer value.
+
+## Statistics functions
+
+```{r}
+## correlation fo numeric columns in iris
+cor(iris[,1:4])
+
+t.test()
+chisq.test(table(mtcars$vs, mtcars$am))
+
+pnorm()
+pchisq()
+```
+
+## Basic Modelling 
+
+R comes with a lot of pre-buit modelling functions all written by statistics professors, and often optimised in base C for efficiency. They also come with a plethora of options on which implementation of a model you would like. As such this along with R's easy to sue data structures has made it a popular choice for Data Science and Analytics.
 
 
 
+# simple lm toexmplain the ~ operator and the summary functions
+
+# ya boy glm 
+
+# throw ya a logistic regression and  the predict function
 
 
 
