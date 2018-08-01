@@ -16,8 +16,8 @@ This workbook is broken down into 6 sections.
 2. Data Structures, Manipulations and all things data
 3. Conditional Statements and Loops
 4. Functions and Packages
-5. Plotting, SQL connection and Heathrow Analytics use case
-6. Modelling
+5. Plotting
+6. Statistics and Modelling
 
 ## 0. Introduction to R and RStudio
 
@@ -483,4 +483,155 @@ sapply(1:10, function(x) x ^ 2) ## define a new function that squares all elemen
 
 
 ### 4. Functions and Packages
+
+## Functions
+
+*"Everything in R is either a list or a funciton"* - Andrew Haynes, circa 2018
+
+We have already seen how functions are used up on objects such as numbers, strings and other data objects and how useful they are. This section of the training is dedicated to creating your own functions.
+
+Creating functions is a large part of programming in R, and similar to functions and macros in other languages saves you time by not having to re-write the same code over and over again.
+
+The basic syntax for creating a function is as follows:
+
+```{r}
+
+function_name = function(arugment1, argument2, ...){
+  # code to be run
+}
+
+```
+
+The function can then be called by typing the name of the function into the console followed by brackets containing the function parameters. Note that objects created inside a function are not saved to the global enviroment and that if you wish to keep the output of a function rather than jsut print the value you must use the `return()` key word and assign the output of the function to a variable.
+
+Let us see an example of a function that returns all the square numbers up until a given value N:
+
+```{r}
+
+square_numbers<-function(N){
+  list_to_square = 1:N
+  square_numbers = list_to_square ^ 2
+  return(square_numbers)
+}
+
+first_6_squares = square_numbers(6)
+print(first_6_squares)
+
+```
+
+R functions can have as many parameters as you like, they don't all have to be used in the function code and can be set with a default value.
+
+R also uses lazy evaluation, so parameters are only initialised once they are needed. This means we can define inputs to our function based on other inputs as long as they appear afterwards.
+
+Let's take at a few eamples of these behaviours:
+
+```{r}
+## define a function with many parameters, some with defaults, some not
+
+welcome_message = function(a = "Welcome to" , b = "Acxiom.", c, d){ 
+   paste(a,b,c)  ## no need to use the variable d
+}
+
+welcome_message(c="Have a nice day!")
+welcome_message(b = "IPG!", c="Have a nice day!")
+
+
+## Show Lazy Evaluation in R
+
+add_square_to_itself = function(a, b=a^2){
+  return(a + b)
+}
+
+add_square_to_itself(4) ##20
+
+```
+
+## Packages
+
+"If you have to write a piece of code 5 times it should be a function. If you have to recreate the same function 5 times it should be in a package" - Andrew Haynes, circa 2018
+
+A package in R is a collection of functions, variables, code and documentation that can be easily imported into R for re-use. They can be loaded in from github, bitbucket, a local folder or most commonly from CRAN (which contrains over 6000 packages) which have been verified by the R foundation. We won't discuss about how to create R packages as that is more advanced.
+
+Without realising it, up until this point we have been using packages without knowing it. All the common R function belong to the `base` package, and R/Rstudio will loadseveral defalut packages such as `utils`, `stats` and `datasets`. To install a new package from CRAN you can use the `install.packages()` function with the name of the package in quotes as input. Similarly packages can be installed from other services, such as github with the `install_github()` function.
+
+To load a package in R we can use one of two functions. The overwhelmingly most common function to use is `library()` even though it is misleading. The alternative is to use the `require()` function which can give a TRUE or FALSE value if the package successfully loaded or not.
+
+
+### 5. Plotting
+
+One of the main reasons that people are attracted to R (other than it's statistical capability) is it's graphical capabilities. It is often highly praised for it's ability to create publication ready visualisations in academia. R's graphical capabilities and background is lengthy, complicated and larger than you'd ever think necessary. For today we are gonna use the two most common libraries, `graphics` and `ggplot2`.
+
+# Base plotting
+
+The main function for base plotting in R is the `plot()` function. It takes two arguments x and y and most other plotting functions are built on top of this one.
+
+If you supply `plot()` with two vectors it will create for you a basic scatter plot. We can then add options to the plot function to jazz it up such as colour, groupings, titles, limits and axis labels.
+
+```{r}
+## basic plot
+plot(x=iris$Sepal.Length, y=iris$Sepal.Width)
+
+## change colour to red and change icon to be a cross
+plot(iris$Sepal.Length, iris$Sepal.Width, col = "red", pch = 4) ## note we can use col instead of colour
+
+## how about we change the grouping to be by the species variable?
+plot(iris$Sepal.Length, iris$Sepal.Width, col = as.factor(iris$Species), pch = 4)
+
+## improve those ugly labels
+
+plot(x    = iris$Sepal.Length,
+     y    = iris$Sepal.Width,
+     col  = as.factor(iris$Species),
+     pch  = 4,
+     xlab = "Sepal Length",
+     ylab = "Sepal Width",
+     main = "Look how cute this plot is")
+
+## finally lets adjust the axis
+plot(x    = iris$Sepal.Length,
+     y    = iris$Sepal.Width,
+     col  = as.factor(iris$Species),
+     pch  = 4,
+     xlab = "Sepal Length",
+     ylab = "Sepal Width",
+     main = "Look how cute this plot is",
+     xlim = c(4.0, 8.0),
+     ylim = c(1.5, 5.5))
+
+
+
+```
+
+We can also create other types of plots easily with similar functions, such as line plots, histograms, bar charts and boxplots.
+
+```{r}
+## produce a line plot
+line_data = data.frame(x = 1:5, y = seq(1, 9, by = 2))
+plot(line_data$x, line_data$y, type = "b") ## type = "b"" gives both points and lines, type="l" gives just lines
+
+
+##  produce a barplot of spend
+bar_data = data.frame(Staff = c("Non-Staff", "Staff"), Total_Spend = c(12345, 17896))
+barplot(bar_data$Total_Spend, 
+        col = as.factor(bar_data$Staff), 
+        names.arg = bar_data$Staff, 
+        ylim = c(0,20000), 
+        ylab = "Total Spend")
+
+
+## histogram
+hist(iris$Sepal.Length)
+
+## boxplot 
+boxplot(Sepal.Length ~ Species, data = iris, ylab = "Sepal Length", xlab = "Species")
+
+```
+
+
+
+
+
+
+
+
 
