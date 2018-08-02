@@ -1,10 +1,11 @@
 ---
 title: "Team Training"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-editor_options: 
-  chunk_output_type: console
+editor_options:
+  chunk_output_type: inline
 ---
 
 This is an interactive R notebook which contains all the training materials. When you execute code within the notebook, the results appear beneath the code. 
@@ -312,15 +313,6 @@ str(iris)  ## structure of the data - gives dimensions, column names, data type 
 Data.frames are really easy to use and manipulate and comes with all the usual functions such as `merge`, unions - done with `rbind` for data setting, and `cbind` for appending columns without a merge.
 
 ```{r}
-aussie_scores = data.frame( Names = c('Andrew', 'Claire', 'Chris', 'Allen'),
-                            Aussie_score = c(1,1,10,1))
-                            
-drink_of_choice = data.frame( Names = c('Andrew', 'Claire', 'Chris'),
-                              Drinks = c('Mojito', 'Tequila Sunrise', 'Espresso Martini'))
-
-merge(aussie_scores, drink_of_choice, by = "Names") ## inner join
-merge(aussie_scores, drink_of_choice, by = "Names", all.x = TRUE) ## left join
-
 iris_top = head(iris, 6)
 iris_bottom = tail(iris, 6)
 
@@ -636,8 +628,88 @@ Without realising it, up until this point we have been using packages without kn
 
 To load a package in R we can use one of two functions. The overwhelmingly most common function to use is `library()` even though it is misleading. The alternative is to use the `require()` function which can give a TRUE or FALSE value if the package successfully loaded or not.
 
+###5. Data Operations
 
-### 5. Plotting
+In this section we will briefly discuss data operations such as reading and writing data, merging data, filtering data and aggregating data. We'll show how to do this in base R and using the `tidyr` and `dplyr` packages.
+
+## reading and writing data
+
+Let's start with writing to a file so we have something to read back in. To write to a file we need to call the `write.table()` function and specify a couple of options. (Note: there are other similar functions such as `read.csv`, but `read.table` is the base for these functions)
+
+```{r}
+
+## output the iris dataset to a csv
+## getwd()
+write.table(iris, file = "iris_output.csv", sep = ",", row.names = F)
+
+## read data back in under different name
+iris_output = read.table(file = "iris_output.csv", header = T, sep = ",")
+
+```
+
+## merging data 
+
+Merging data in R is a little different and requires speccifying certain options to get your usual inner, left and outer joins.
+
+```{r}
+aussie_scores = data.frame( Names = c('Andrew', 'Claire', 'Chris', 'Allen'),
+                            Aussie_score = c(1,1,10,1))
+                            
+drink_of_choice = data.frame( Names = c('Andrew', 'Claire', 'Chris'),
+                              Drinks = c('Mojito', 'Tequila Sunrise', 'Espresso Martini'))
+
+merge(aussie_scores, drink_of_choice, by = "Names") ## inner join
+merge(aussie_scores, drink_of_choice, by = "Names", all.x = TRUE) ## left join
+
+```
+
+## filtering data
+
+In base R we can filter by supplying a list of logical TRUE or FALSE values to a data object. We can also convert these TRUE or FALSE values to row numbers/indices with the `which()` function:
+
+```{r}
+
+### supply data with missing value
+missing_data = merge(aussie_scores, drink_of_choice, by = "Names", all.x = TRUE) 
+
+is.na(missing_data) ## we have one value missing
+complete.cases(missing_data) ## first row has missing data
+
+missing_data[complete.cases(missing_data), ] ## remove missing data
+
+### remove all values of sepal.length greater than a certain value
+
+hist(iris$Sepal.Length)
+
+rows_to_remove = which(iris$Sepal.Length > 7)
+iris[rows_to_remove, ]
+
+```
+
+## sorting data
+
+Sorting data in R is not intuitive and I have to google it everytime I need to do it. There is a `sort` fucntion but handily it doesn't sort data as you would expect. Instead you need to pass the `order()` function with your desired columns to your dataset in an index.
+
+```{r}
+## sort iris data by reverse alphabetical, and ascending speal length
+sorted_iris = iris[order(-iris$Species, iris$Sepal.Length), ]
+
+```
+
+## aggregating data
+
+To aggregate data, handily we can passs a dataset, column(s) to group by and a function to the `aggregate` function. 
+
+```{r}
+## by passing objects to function
+aggregate(iris$Sepal.Length, by=list(iris$Species), FUN = mean)
+
+## using formula interface 
+aggregate(Sepal.Length~Species, data = iris, FUN = mean)
+
+```
+
+### 6. Plotting
 
 One of the main reasons that people are attracted to R (other than it's statistical capability) is it's graphical capabilities. It is often highly praised for it's ability to create publication ready visualisations in academia. R's graphical capabilities and background is lengthy, complicated and larger than you'd ever think necessary. For today we are gonna use the two most common libraries, `graphics` and `ggplot2`.
 
@@ -716,7 +788,7 @@ Base R graphics are designed to be simple, minimalistic but very flexible to use
 INSERT COOL VIZ HERE
 
 
-### 6. Statistics and Modelling
+### 7. Statistics and Modelling
 
 Now, the reason R was created - statistics. You will find R has lots of pre-built, highly optimised functions to do with probability, sampling, statistical tests and modelling.
 
@@ -778,7 +850,6 @@ R comes with a lot of pre-buit modelling functions all written by statistics pro
 # ya boy glm 
 
 # throw ya a logistic regression and  the predict function
-
 
 
 
