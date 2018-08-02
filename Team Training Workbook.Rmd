@@ -5,7 +5,7 @@ output:
   html_document:
     df_print: paged
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 This is an interactive R notebook which contains all the training materials. When you execute code within the notebook, the results appear beneath the code. 
@@ -199,12 +199,6 @@ We can then look at the opposite of paste, which is substring:
 string_to_split = 'Hello &World! &How &are& you& doing?'
 strsplit(string_to_split, split = '&')
 
-```
-
-
-
-```{r}
-#string
 ```
 
 
@@ -407,12 +401,16 @@ list3[[2]][[2]][,1][4]
 
 R has multiple ways of running if-else statements, they are primarily `if()`, `ifelse()` and `switch()`. Switch statements are rarely used in R, and the preferred method is to use nested if-else or ifelse statements. The syntax for if statements is as below:
 
-```{r}
+```
 ## if-else statement
-if(condition1){
-  
+if(1 > 0){
+  a=1
+  b=3
+  c=4
 } else if(condition2){
-  
+  a=2
+  b=8
+  p=2
 } else {
   
 }
@@ -475,7 +473,7 @@ R has 2 basic loops, a `for()` loop and a `while()` loop. We'll concentrate most
 
 The basic syntax for for loops is as follows:
 
-```{r}
+```
 for(i in list){
   #do something
 }
@@ -499,7 +497,7 @@ for(i in 1:5){
   b    = append(b, i^3)
 }
 print(a)
-print(paste0('The first 5 cubes are: ', paste0(b, collapse = ', ')))
+paste0('The first 5 cubes are: ', paste0(b, collapse = ', '))
 
 ```
 
@@ -526,6 +524,7 @@ while(j + 1 < 5){
   if(j == 2){
     break
   }
+  print(j)
 }
 
 ```
@@ -547,7 +546,7 @@ To use an `apply` function, you have to supply a dataset x, and a function FUN (
 
 sapply(iris, class) ## find the class of each column and return as a named vector
 
-apply(iris[49:52, 5, drop = FALSE], 2, toupper) ## take a subset or the iris dataset species column, and apply toupper                                                 ## function over rows
+apply(iris[49:52, 5, drop = FALSE], q, toupper) ## take a subset or the iris dataset species column, and apply toupper                                                 ## function over rows
 
 sapply(1:10, function(x) x ^ 2) ## define a new function that squares all elements in the array
 
@@ -566,10 +565,10 @@ Creating functions is a large part of programming in R, and similar to functions
 
 The basic syntax for creating a function is as follows:
 
-```{r}
-
-function_name = function(arugment1, argument2, ...){
+```
+function_name = function(argument1, argument2, ...){
   # code to be run
+  # return(value)
 }
 
 ```
@@ -630,7 +629,7 @@ To load a package in R we can use one of two functions. The overwhelmingly most 
 
 ###5. Data Operations
 
-In this section we will briefly discuss data operations such as reading and writing data, merging data, filtering data and aggregating data. We'll show how to do this in base R and using the `tidyr` and `dplyr` packages.
+In this section we will briefly discuss data operations such as reading and writing data, merging data, filtering data and aggregating, and sorting data. We'll show how to do this in base R and using the `tidyr` and `dplyr` packages.
 
 ## reading and writing data
 
@@ -692,7 +691,7 @@ Sorting data in R is not intuitive and I have to google it everytime I need to d
 
 ```{r}
 ## sort iris data by reverse alphabetical, and ascending speal length
-sorted_iris = iris[order(-iris$Species, iris$Sepal.Length), ]
+sorted_iris = iris[order(iris$Species, -iris$Sepal.Length), ]
 
 ```
 
@@ -705,9 +704,43 @@ To aggregate data, handily we can passs a dataset, column(s) to group by and a f
 aggregate(iris$Sepal.Length, by=list(iris$Species), FUN = mean)
 
 ## using formula interface 
-aggregate(Sepal.Length~Species, data = iris, FUN = mean)
+aggregate(Sepal.Length~Species + Petal.Length, data = iris, FUN = mean)
 
 ```
+
+require(dplyr)
+require(tidyr)
+
+bwt =  MASS::birthwt
+head(bwt)
+
+bwt_summary = bwt %>% group_by(race, smoke) %>% summarise(mean = mean(bwt)) %>% as.data.frame()
+bwt_summary$race = factor(bwt_summary$race)
+bwt_summary$smoke = factor(bwt_summary$smoke)
+
+ggplot(bwt_summary, aes(x=smoke, y = mean, fill = race)) +
+  geom_col(position="dodge") +
+  geom_label() +
+  xlab('Company') +
+  ylab('Total Spend (m)') +
+  labs(fill = "Year") +
+  scale_x_discrete(labels = c("IPG", "Acxiom")) +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = c("yellow", "purple4","green", "purple4","yellow", "purple4"), labels = c("2017", "2018","2019", "2018","2017", "2018")) +
+  theme_minimal() +
+  theme(panel.background = element_rect(fill="pink"),
+        axis.text = element_text(size = "16"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_line(colour = "red"),
+        panel.grid.major.x = element_blank(),
+        axis.title = element_text(hjust = 5)) +
+  ggtitle('This is a garrish plot')
+     
+
+
+
+
+
 
 ### 6. Plotting
 
@@ -785,7 +818,22 @@ Base R graphics are designed to be simple, minimalistic but very flexible to use
 
 `ggplot2` has a sharp learning curve but it's potential is pretty limitless. I'm gonna talk through one big function and break down the individual parts instead of commenting on what each individual function does (I still sometimes need documentation and google for that):
 
-INSERT COOL VIZ HERE
+ggplot(bwt_summary, aes(x=race, y = mean, fill = smoke)) +
+  geom_col(position="dodge") +
+  xlab('Company') +
+  ylab('Total Spend (m)') +
+  labs(fill = "Year") +
+  scale_x_discrete(labels = c("IPG", "Acxiom", 'LiveRamp')) +
+  scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+  scale_fill_manual(values = c("yellow", "purple4","yellow", "purple4","yellow", "purple4"), labels = c("2017", "2018","2017", "2018","2017", "2018")) +
+  theme_minimal() +
+  theme(panel.background = element_rect(fill="pink"),
+        axis.text = element_text(size = "16"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_line(colour = "red"),
+        panel.grid.major.x = element_blank(),
+        axis.title = element_text(hjust = 5)) +
+  ggtitle('This is a garrish plot')
 
 
 ### 7. Statistics and Modelling
@@ -828,7 +876,7 @@ For reproducible results in R using PRNG's it is necessary to set a seed before 
 
 ## Statistics functions
 
-```{r}
+```
 ## correlation fo numeric columns in iris
 cor(iris[,1:4])
 
@@ -839,17 +887,6 @@ pnorm()
 pchisq()
 ```
 
-## Basic Modelling 
-
-R comes with a lot of pre-buit modelling functions all written by statistics professors, and often optimised in base C for efficiency. They also come with a plethora of options on which implementation of a model you would like. As such this along with R's easy to sue data structures has made it a popular choice for Data Science and Analytics.
-
-
-
-# simple lm toexmplain the ~ operator and the summary functions
-
-# ya boy glm 
-
-# throw ya a logistic regression and  the predict function
 
 
 
